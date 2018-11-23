@@ -1,0 +1,84 @@
+package menu;
+
+public class Alumno {
+
+	String Id,Nombre,Apellidos,Altura,Curso,Mayor;
+	int Edad;
+	
+	Alumno(String Id,String Nombre,String Apellidos,int Edad,String Altura,String Curso,String Mayor){
+		this.Id=Id;
+		this.Nombre=Nombre;
+		this.Apellidos=Apellidos;
+		this.Edad=Edad;
+		this.Altura=Altura;
+		this.Curso=Curso;
+	}
+	
+	
+	public String getId() {
+        return Id;
+    }
+
+    public void setId(String Id) {
+        this.Id=Id;
+    }
+
+
+	public String getNombre() {
+        return Nombre;
+    }
+
+    public void setNombre(String Nombre) {
+        this.Nombre=Nombre;
+    }
+  
+
+    public String getApellido() {
+        return Apellidos;
+    }
+
+    public void setApellido(String Apellidos) {
+        this.Apellidos = Apellidos;
+    }
+    
+    public int getEdad() {
+        return Edad;
+    }
+
+    public void setEdad(int Edad) {
+        this.Edad = Edad;
+    }
+    
+    public String getAltura() {
+        return Altura;
+    }
+
+    public void setAltura(String Altura) {
+        this.Altura = Altura;
+    }
+
+
+    public String getCurso() {
+        return Curso;
+    }
+
+    public void setCurso(String Curso) {
+        this.Curso = Curso;
+    }     
+
+    public String getMayor() {
+        return Mayor;
+    }
+
+    public void setMayor(String Mayor) {
+        this.Mayor = Mayor;
+    }     
+
+	
+
+	
+	
+	
+	
+
+}

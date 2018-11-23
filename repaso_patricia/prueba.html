@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es-ES" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="estilos.css">
+    </head>
+    <body>
+        <script>
+            if(window.XMLHttpRequest){
+                xmlhttp=new XMLHttpRequest();
+            }
+            else{
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            
+            xmlhttp.open("GET","Alumno.xml",false);
+            xmlhttp.send();
+            XMLDoc=xmlhttp.responseXML;
+            
+            document.write("<table border='1' style='font-size:35px;'>")
+            document.write("<tr><th>Id</th><th>Nombre</th><th>Apellidos</th><th>Curso</th><th>Edad</th><th>Altura</th><th>Mayor</th></tr>");
+            
+            var x=XMLDoc.getElementsByTagName("Id");
+            
+            for(i=0;i<x.length;i++){
+                document.write("<tr style='color:red'><td>");//revisar
+                document.write(XMLDoc.getElementsByTagName("Id")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Nombre")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Apellidos")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Curso")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Edad")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Altura")[i].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(XMLDoc.getElementsByTagName("Mayor")[i].childNodes[0].nodeValue);
+                document.write("</td></tr>");
+            }
+             document.write("</table>");
+        </script>
+    </body>
+</html>

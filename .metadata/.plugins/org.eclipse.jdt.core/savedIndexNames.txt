@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+C:\Users\diurno\Desktop\patricia java\.metadata\.plugins\org.eclipse.jdt.core
+3601139106.index
+861390502.index

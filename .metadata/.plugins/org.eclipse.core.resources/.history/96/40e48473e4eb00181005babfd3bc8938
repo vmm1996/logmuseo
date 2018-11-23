@@ -1,0 +1,130 @@
+package menu;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+public class Insertar {
+	
+	static Scanner teclado=new Scanner(System.in);
+
+	
+	static ArrayList<Alumno> meter(){
+		
+		boolean salir=true;
+		
+		int opcion;
+		String Id,Nombre,Apellidos,Altura,Curso,Mayor;
+		int Edad=0;
+		
+		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
+		
+		do {
+			
+			System.out.println("Introduce el DNI del alumno");
+			Id=teclado.next();
+			System.out.println("Introduce el Nombre del alumno");
+			Nombre=teclado.next();
+			System.out.println("Introduce el Apellido del alumno");
+			teclado.nextLine();
+			Apellidos=teclado.nextLine();
+			System.out.println("Introduce el Altura del alumno");
+			Altura=teclado.next();
+			System.out.println("Introduce el Curso del alumno");
+			Curso=teclado.next();
+			System.out.println("Introduce el Edad del alumno");
+			Edad=teclado.nextInt();
+			
+			
+			if(Edad<18) {
+				Mayor="Es mayor de edad";
+			}
+			else {
+				Mayor="Es menor de edad";
+			}
+			
+			alumnos.add(new Alumno(Id,Nombre,Apellidos,Edad,Altura,Curso,Mayor));
+			
+			
+			System.out.println("Desea introducir mas alumnos pulse 1 para cuntinuar 2 para salir");
+			opcion=teclado.nextInt();
+			
+			switch(opcion) {
+			case 1:
+				salir=true;
+				break;
+			case 2:
+				salir=false;
+				break;
+			}	
+		}while(salir!=false);
+		return alumnos;	
+	}
+	
+	static void leeralumnos(ArrayList<Alumno> alumnos) {
+		System.out.println("... Alumnos ingresados ...");
+		Iterator<Alumno> itr = alumnos.iterator();
+		while(itr.hasNext()){
+			Alumno alum = itr.next();
+			System.out.println(alum.getId()+ ".-> "+ alum.getNombre()
+			+".-> "+ alum.getApellido()+".-> "+ alum.getEdad()+".-> "+ alum.getAltura()+
+			".-> "+ alum.getCurso()+ " " + alum.getMayor());
+			
+		}
+	}
+	
+	static void archivotxt(ArrayList<Alumno> alumnos) {
+		String separador="... Alumnos ingresados ...\n"+System.getProperty("line.separator");
+		Iterator<Alumno> itr = alumnos.iterator();
+		while(itr.hasNext()){
+			Alumno alum = itr.next();
+			separador +=alum.getId() + ".-> "+ alum.getNombre()
+			+".-> "+ alum.getApellido()+".-> "+ alum.getEdad()+".-> "+ alum.getAltura()+
+			".-> "+ alum.getCurso()+System.getProperty("line.separator");
+		}
+		separador +="\n---------------------------------------------";
+		try {
+			FileWriter fWriter = new FileWriter(new File("Alumno.txt"), true);
+			fWriter.write(separador);
+			fWriter.flush();
+			fWriter.close();
+			System.out.println("\nLos datos se han guardado correctamente en el fichero: Alumno.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	static void borrar(ArrayList<Alumno> alumnos) {
+		
+		@SuppressWarnings("resource")
+		Scanner s = new Scanner(System.in);
+		System.out.println("... Borrando alumno segun id ...");
+		Iterator<Alumno> itr = alumnos.iterator();
+		System.out.println("Introduzca el id del alumno que desea borrar:");
+		String i = s.nextLine();
+		System.out.println(i);
+		while(itr.hasNext()){
+			Alumno alumno = itr.next();
+			System.out.println(alumno.getId());
+			if (i.equalsIgnoreCase(alumno.getId())) {
+				System.out.println(i);
+				System.out.println("Partido encontrado. Procediendo a borrado...");
+				itr.remove();
+			}
+		} 
+		leeralumnos(alumnos);
+	}
+	
+
+	public static void leer() throws IOException {
+		RandomAccessFile procesoleer = new RandomAccessFile("Alumno.txt","rw");
+		for(int i=0;i<procesoleer.length();i++){
+					System.out.print((char)procesoleer.read());
+		}
+		procesoleer.close();
+	}
+}

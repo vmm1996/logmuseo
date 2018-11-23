@@ -1,0 +1,186 @@
+package menu;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+public class Insertar {
+	
+	static Scanner teclado=new Scanner(System.in);
+
+	
+	static ArrayList<Alumno> meter(ArrayList<Alumno> alumnos){
+		
+		boolean salir=true;
+		
+		int opcion;
+		String Id,Nombre,Apellidos,Altura,Curso,Mayor;
+		int Edad=0;
+		
+		
+		do {
+			
+			System.out.println("Introduce el DNI del alumno");
+			Id=teclado.next();
+			System.out.println("Introduce el Nombre del alumno");
+			Nombre=teclado.next();
+			System.out.println("Introduce el Apellido del alumno");
+			teclado.nextLine();
+			Apellidos=teclado.nextLine();
+			System.out.println("Introduce el Altura del alumno");
+			Altura=teclado.next();
+			System.out.println("Introduce el Curso del alumno");
+			Curso=teclado.next();
+			System.out.println("Introduce el Edad del alumno");
+			Edad=teclado.nextInt();
+			
+			
+			if(Edad>18) {
+				Mayor="Es mayor de edad";
+			}
+			else {
+				Mayor="Es menor de edad";
+			}
+			
+			alumnos.add(new Alumno(Id,Nombre,Apellidos,Edad,Altura,Curso,Mayor));
+			
+			
+			System.out.println("Desea introducir mas alumnos pulse 1 para cuntinuar 2 para salir");
+			opcion=teclado.nextInt();
+			
+			switch(opcion) {
+			case 1:
+				salir=true;
+				break;
+			case 2:
+				salir=false;
+				break;
+			}	
+		}while(salir!=false);
+		return alumnos;	
+	}
+	
+	static void leeralumnos(ArrayList<Alumno> alumnos) {
+		System.out.println("... Alumnos ingresados ...");
+		Iterator<Alumno> itr = alumnos.iterator();
+		while(itr.hasNext()){
+			Alumno alum = itr.next();
+			System.out.println(alum.getId()+ ".-> "+ alum.getNombre()
+			+".-> "+ alum.getApellido()+".-> "+ alum.getEdad()+".-> "+ alum.getAltura()+
+			".-> "+ alum.getCurso()+ ".->" + alum.getMayor());
+			
+		}
+	}
+	
+	static void archivotxt(ArrayList<Alumno> alumnos) {
+		String separador="... Alumnos ingresados ..."+System.getProperty("line.separator");
+		Iterator<Alumno> itr = alumnos.iterator();
+		while(itr.hasNext()){
+			Alumno alum = itr.next();
+			separador +=alum.getId() + ".-> "+ alum.getNombre()
+			+".-> "+ alum.getApellido()+".-> "+ alum.getEdad()+".-> "+ alum.getAltura()+
+			".-> "+ alum.getCurso()+System.getProperty("line.separator");
+		}
+		separador +="\n---------------------------------------------";
+		try {
+			FileWriter fWriter = new FileWriter(new File("Alumno.txt"), true);
+			fWriter.write(separador);
+			fWriter.flush();
+			fWriter.close();
+			System.out.println("\nLos datos se han guardado correctamente en el fichero: Alumno.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	static void borrar(ArrayList<Alumno> alumnos) {
+		
+		@SuppressWarnings("resource")
+		Scanner s = new Scanner(System.in);
+		System.out.println("... Borrando alumno segun id ...");
+		Iterator<Alumno> itr = alumnos.iterator();
+		System.out.println("Introduzca el id del alumno que desea borrar:");
+		String i = s.nextLine();
+		while(itr.hasNext()){
+			Alumno alumno = itr.next();
+			if (i.equalsIgnoreCase(alumno.getId())) {
+				System.out.println("Partido encontrado. Procediendo a borrado...");
+				itr.remove();
+			}
+		} 
+		leeralumnos(alumnos);
+	}
+	
+
+	public static void leer() throws IOException {
+		RandomAccessFile procesoleer = new RandomAccessFile("Alumno.txt","rw");
+		for(int i=0;i<procesoleer.length();i++){
+					System.out.print((char)procesoleer.read());
+		}
+		procesoleer.close();
+	}
+
+	public static void volcarxml(ArrayList<Alumno> alumno) throws ParserConfigurationException{
+		try {
+	        DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder build = dFact.newDocumentBuilder();
+	        org.w3c.dom.Document doc = build.newDocument();
+	        Node raiz = (Node) ((org.w3c.dom.Document) doc).createElement("Colegio");
+	        ((Node) doc).appendChild(raiz);	       
+	        for (Alumno dtl : alumno) {
+	        	Element Detalles = (Element) ((org.w3c.dom.Document) doc).createElement("Alumno");
+		        raiz.appendChild((Node) Detalles);
+	            Element Id = (Element) ((org.w3c.dom.Document) doc).createElement("Id");
+	            ((Node) Id).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getId())));
+	            ((Node) Detalles).appendChild((Node) Id);            
+	            Element nom = (Element) ((org.w3c.dom.Document) doc).createElement("Nombre");
+	            ((Node) nom).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getNombre())));
+	            ((Node) Detalles).appendChild((Node) nom);	            
+	            Element ape = (Element) ((org.w3c.dom.Document) doc).createElement("Apellidos");
+	            ((Node) ape).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getApellido())));
+	            ((Node) Detalles).appendChild((Node) ape);	            
+	            Element cur = (Element) ((org.w3c.dom.Document) doc).createElement("Curso");
+	            ((Node) cur).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getCurso())));
+	            ((Node) Detalles).appendChild((Node) cur);
+	            Element eda = (Element) ((org.w3c.dom.Document) doc).createElement("Edad");
+	            ((Node) eda).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getEdad())));
+	            ((Node) Detalles).appendChild((Node) eda);	            
+	            Element alt = (Element) ((org.w3c.dom.Document) doc).createElement("Altura");
+	            ((Node) alt).appendChild(((org.w3c.dom.Document) doc).createTextNode(String.valueOf(dtl.getAltura())));
+	            ((Node) Detalles).appendChild((Node) alt);           
+	        }
+	        TransformerFactory tranFactory = TransformerFactory.newInstance();
+	        Transformer aTransformer = tranFactory.newTransformer();
+	        DOMSource source = new DOMSource((Node) doc);
+	        try {
+	            FileWriter fos = new FileWriter(new File("Alumnos.xml"));
+	            StreamResult result = new StreamResult(fos);
+	            aTransformer.transform(source, result);
+	            System.out.println("Los datos han sido guardados correctamente en el archivo Alumnos.xml");
+
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+		    } catch (Exception ex2) {
+		        ex2.printStackTrace();
+		    } 
+		
+	}
+	
+}

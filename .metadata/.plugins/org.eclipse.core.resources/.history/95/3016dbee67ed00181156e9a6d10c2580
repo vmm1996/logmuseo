@@ -1,0 +1,18 @@
+package menu;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+public class Procesos {
+
+	
+
+	public static void leer() throws IOException {
+		RandomAccessFile procesoleer = new RandomAccessFile("Alumno.txt","rw");
+		for(int i=0;i<procesoleer.length();i++){
+					System.out.print((char)procesoleer.read());
+		}
+		procesoleer.close();
+	}
+}
